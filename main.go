@@ -110,17 +110,24 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 	t.Execute(res, nil)
 }
 
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "your-password"
+	dbname   = "calhounio_demo"
+)
+
 func main() {
 
-	debugmode := "true"
-	if debugmode == "true" {
-		db, err = sql.Open("mysql", "jharvard:crimson@tcp(localhost:3306)/GoJudge")
-	} else {
-		connectionName := mustGetenv("CLOUDSQL_CONNECTION_NAME")
-		user := mustGetenv("CLOUDSQL_USER")
-		password := os.Getenv("CLOUDSQL_PASSWORD") // NOTE: password may be empty
-		db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@cloudsql(%s)/GoJudge", user, password, connectionName))
-	}
+	// debugmode := "true"
+	// if debugmode == "true" {
+	// 	db, err = sql.Open("pg", "postgres:mysecretpassword(some-postgres:5432)/GoJudge")
+	// } else {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+	db, err = sql.Open("postgres", psqlInfo)
+	// }
 
 	if err != nil {
 		panic(err.Error())

@@ -1,0 +1,2 @@
+#fresh.conf
+build = go build -o main
