@@ -14,6 +14,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/appengine"
+
+	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
@@ -111,39 +113,40 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 const (
-	host     = "localhost"
+	host     = "db"
 	port     = 5432
-	user     = "postgres"
-	password = "your-password"
-	dbname   = "calhounio_demo"
+	user     = "user"
+	password = "password"
+	dbname   = "dbname"
 )
 
-func main() {
-
-	// debugmode := "true"
-	// if debugmode == "true" {
-	// 	db, err = sql.Open("pg", "postgres:mysecretpassword(some-postgres:5432)/GoJudge")
-	// } else {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+func connectToDB() {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
-	db, err = sql.Open("postgres", psqlInfo)
-	// }
 
+	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("Error opening database: %q", err)
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("Error pinging database: %q", err)
 	}
+	fmt.Println("Successfully connected!")
+}
 
+func main() {
+	// connectToDB()
 	http.HandleFunc("/signup", signupPage)
 	http.HandleFunc("/login", loginPage)
 	http.HandleFunc("/", homePage)
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources"))))
-	fmt.Println("Listening on 127.0.0.1:8080")
+
+	fmt.Println("Listening on 127.0.0.1:9000")
+
 	err := http.ListenAndServe(":9000", nil) // setup listening port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

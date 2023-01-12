@@ -5,7 +5,7 @@ up:
 	docker-compose -f dev-docker.compose.yaml up
 
 down:
-	docker-compose-f dev-docker.compose.yaml down
+	docker-compose -f dev-docker.compose.yaml down
 
 restart: down -f dev-docker.compose.yaml up
 
