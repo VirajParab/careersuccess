@@ -1,0 +1,27 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/dbname
+    volumes:
+      - .:/app
+    command: ./fresh -c fresh.conf
+    networks:
+      - mynet
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbname
+    networks:
+      - mynet
+networks:
+    mynet:
+      driver: bridge
