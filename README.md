@@ -27,7 +27,7 @@ This is a project template for a Go application with hot reloading, it includes 
  make up
 ```
 
-The application will be available at `http://localhost:8080` and the database at `postgres://user:password@localhost:5432/dbname`
+The application will be available at `http://localhost:8081` and the database at `postgres://user:password@localhost:5432/dbname`
 
 ## Usage
 

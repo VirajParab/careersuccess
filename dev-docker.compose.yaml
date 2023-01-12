@@ -4,14 +4,12 @@ services:
     build:
       context: .
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - db
     environment:
       - DATABASE_URL=postgres://user:password@db:5432/dbname
-    volumes:
-      - .:/app
-    command: fresh -c fresh.conf
+    command: ./fresh -c fresh.conf
   db:
     image: postgres
     environment:
